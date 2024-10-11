@@ -7,6 +7,6 @@ Repo for the 2nd mandatory assignment of Problem Sovling with Scripting
 
 # How to use
 1. Download the repo, and navigate to the directory
-2. Run the pollowing commands
-    $ pip install .
-    $ pip install --upgrade .
+2. Run the pollowing commands \n
+    $ pip install . \n
+    $ pip install --upgrade . \n
