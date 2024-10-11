@@ -1,0 +1,13 @@
+README.md
+setup.py
+morning_greetings/__init__.py
+morning_greetings/contacts.py
+morning_greetings/logger.py
+morning_greetings/main.py
+morning_greetings/message_generator.py
+morning_greetings/message_sender.py
+morning_greetings.egg-info/PKG-INFO
+morning_greetings.egg-info/SOURCES.txt
+morning_greetings.egg-info/dependency_links.txt
+morning_greetings.egg-info/entry_points.txt
+morning_greetings.egg-info/top_level.txt

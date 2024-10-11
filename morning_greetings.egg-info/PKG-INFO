@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: morning_greetings
+Version: 0.1
+Summary: A package that sends Good Morning messages to contacts
+Author: Your Name
+Author-email: your_email@example.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+# mandatory_assignment_2
+Repo for the 2nd mandatory assignment of Problem Sovling with Scripting
+
+- Added an extra class (Contact), and the list of contacts is now called ContactList. 
+- Added regex in the input handling of the contact information. 
+
+Main problems remains:
+- How do I make the messages send out at the correct time?
+- How do I make this into a package?

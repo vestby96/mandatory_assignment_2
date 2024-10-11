@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
-from contacts import Contact
+from morning_greetings.contacts import Contact
 
 def log_message(c: Contact, msg: str):
     with open("log.txt", "a") as f:
-        f.write(f"{datetime.now()} - Sent to {c.name}: {msg}\n")
+        f.write(f"{datetime.now()} - Sent to {c.name} ({c.email}): {msg}\n")
 
 def print_logs():
     """Print log entries from today and the previous day."""

@@ -1,5 +1,5 @@
-from contacts import Contact
-from logger import log_message
+from morning_greetings.contacts import Contact
+from morning_greetings.logger import log_message
 
 def send_message(c: Contact, msg: str):
     if not c.email:

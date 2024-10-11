@@ -1,5 +1,5 @@
 from datetime import datetime
-from contacts import Contact
+from morning_greetings.contacts import Contact
 
 def message_generator(c: Contact):
     # Parse the preferred time string (e.g., "08:00 AM")
