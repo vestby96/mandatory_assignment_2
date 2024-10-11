@@ -14,6 +14,7 @@ def send_message_to_contact(contact: Contact):
     else:
         print(f"Message already sent to {contact.name} today. Skipping...")
 
+
 def message_already_sent_today(contact: Contact) -> bool:
     """Check if a message has already been sent to this contact today, using the email."""
     today = datetime.now().date()
@@ -21,7 +22,6 @@ def message_already_sent_today(contact: Contact) -> bool:
     try:
         with open("log.txt", "r") as log_file:
             for line in log_file:
-                # Example log line: "2024-10-03 08:45:12 - Sent to Jens (jens@python.org): Good Morning, Jens!"
                 log_time_str, log_details = line.split(" - Sent to ")
                 log_date = datetime.strptime(log_time_str.strip(), "%Y-%m-%d %H:%M:%S.%f").date()
 
@@ -30,11 +30,9 @@ def message_already_sent_today(contact: Contact) -> bool:
                 end_email_idx = log_details.find(")")
                 log_email = log_details[start_email_idx:end_email_idx]
 
-                # Check if the log date is today and the email matches
                 if log_date == today and log_email == contact.email:
                     return True
     except FileNotFoundError:
-        # If the log file doesn't exist, no message has been sent
         return False
     
     return False
@@ -43,16 +41,20 @@ def message_already_sent_today(contact: Contact) -> bool:
 # CRUD Functions for Managing Contacts
 
 def add_contact(my_contacts: ContactList):
-    """Add a new contact."""
-    name = input("Enter contact's name: ").strip()
-    email = input("Enter contact's email: ").strip()
-    preferred_time = input("Enter preferred time (e.g., 08:00 AM): ").strip()
+    """Add a new contact with error handling."""
+    try:
+        name = input("Enter contact's name: ").strip()
+        email = input("Enter contact's email: ").strip()
+        preferred_time = input("Enter preferred time (e.g., 08:00 AM): ").strip()
 
-    if preferred_time == "":
-        my_contacts.add_contact(name, email)
-    else:
-        my_contacts.add_contact(name, email, preferred_time)
-    print(f"Contact '{name}' added successfully.")
+        if preferred_time == "":
+            my_contacts.add_contact(name, email)
+        else:
+            my_contacts.add_contact(name, email, preferred_time)
+
+        print(f"Contact '{name}' added successfully.")
+    except ValueError as e:
+        print(f"Error adding contact: {e}. Please try again.")
 
 
 def view_contacts(my_contacts: ContactList):
@@ -68,69 +70,66 @@ def view_contacts(my_contacts: ContactList):
 
 def update_contact(my_contacts: ContactList):
     """Update an existing contact, using either the email or name to find the contact."""
-    
-    search_key = input("\nEnter the contact's name or email to update: ").strip()
+    try:
+        search_key = input("\nEnter the contact's name or email to update: ").strip()
 
-    # Try to find contact by email first (since email is unique)
-    matching_contacts = [c for c in my_contacts.get_contacts() if c.email == search_key]
+        matching_contacts = [c for c in my_contacts.get_contacts() if c.email == search_key]
 
-    # If no contact is found by email, try to find by name (there could be multiple)
-    if not matching_contacts:
-        matching_contacts = [c for c in my_contacts.get_contacts() if c.name.lower() == search_key.lower()]
+        if not matching_contacts:
+            matching_contacts = [c for c in my_contacts.get_contacts() if c.name.lower() == search_key.lower()]
 
-    # If no contacts are found at all, return an error
-    if not matching_contacts:
-        print(f"No contact found with name or email '{search_key}'.")
-        return
-
-    # If multiple contacts are found by name, let the user choose one
-    if len(matching_contacts) > 1:
-        print("\nMultiple contacts found with the same name:")
-        for idx, contact in enumerate(matching_contacts, start=1):
-            print(f"{idx}. Name: {contact.name}, Email: {contact.email}, Preferred Time: {contact.preferred_time}")
-        
-        try:
-            choice = int(input("\nEnter the number of the contact you want to update: ").strip())
-            contact = matching_contacts[choice - 1]
-        except (ValueError, IndexError):
-            print("Invalid selection.")
+        if not matching_contacts:
+            print(f"No contact found with name or email '{search_key}'.")
             return
-    else:
-        # If only one contact is found, proceed with updating that contact
-        contact = matching_contacts[0]
 
-    # Proceed to update the selected contact
-    print(f"\nUpdating contact: {contact.name} ({contact.email})")
+        if len(matching_contacts) > 1:
+            print("\nMultiple contacts found with the same name:")
+            for idx, contact in enumerate(matching_contacts, start=1):
+                print(f"{idx}. Name: {contact.name}, Email: {contact.email}, Preferred Time: {contact.preferred_time}")
+            
+            try:
+                choice = int(input("\nEnter the number of the contact you want to update: ").strip())
+                contact = matching_contacts[choice - 1]
+            except (ValueError, IndexError):
+                print("Invalid selection.")
+                return
+        else:
+            contact = matching_contacts[0]
 
-    # Ask for new email and preferred time, with an option to leave it unchanged
-    new_email = input(f"Enter new email (leave blank to keep '{contact.email}'): ").strip()
-    new_time = input(f"Enter new preferred time (leave blank to keep '{contact.preferred_time}'): ").strip()
+        print(f"\nUpdating contact: {contact.name} ({contact.email})")
+        new_email = input(f"Enter new email (leave blank to keep '{contact.email}'): ").strip()
+        new_time = input(f"Enter new preferred time (leave blank to keep '{contact.preferred_time}'): ").strip()
 
-    if new_email:
-        contact.email = new_email
-    if new_time:
-        contact.preferred_time = new_time
+        if new_email:
+            contact.email = new_email
+        if new_time:
+            contact.preferred_time = new_time
 
-    print(f"Contact '{contact.name}' updated successfully.")
+        print(f"Contact '{contact.name}' updated successfully.")
+    except ValueError as e:
+        print(f"Error updating contact: {e}. Please try again.")
 
 
-def delete_contact(my_contacts):
-    """Delete a contact."""
-    view_contacts(my_contacts)  # Show current contacts first
-    name = input("\nEnter the name of the contact you want to delete: ").strip()
+def delete_contact(my_contacts: ContactList):
+    """Delete a contact with error handling."""
+    try:
+        view_contacts(my_contacts)
+        name = input("\nEnter the name of the contact you want to delete: ").strip()
 
-    if my_contacts.remove_contact(name):
-        print(f"Contact '{name}' deleted successfully.")
-    else:
-        print(f"No contact found with the name '{name}'.")
+        if my_contacts.remove_contact(name):
+            print(f"Contact '{name}' deleted successfully.")
+        else:
+            print(f"No contact found with the name '{name}'.")
+    except ValueError as e:
+        print(f"Error deleting contact: {e}. Please try again.")
 
 
 def force_send_all(my_contacts: ContactList):
     """Force send messages to all contacts regardless of preferred time."""
     for c in my_contacts.get_contacts():
-        if not message_already_sent_today(c.name):
-            msg = message_generator(c.name)
-            send_message(c.email, msg)
+        if not message_already_sent_today(c):
+            msg = message_generator(c)
+            send_message(c, msg)
         else:
             print(f"Message already sent to {c.name} today. Skipping...")
 
@@ -175,54 +174,56 @@ def main():
     my_contacts.add_contact("Jens", "jens@python.org")
     my_contacts.add_contact("Nils", "nils@goolge.com", "10:30 AM")
     my_contacts.add_contact("Knut", "knut@microsoft.com", "06:43 PM")
+
+    print(f"\nCurrent Time: {datetime.now().strftime('%I:%M %p')}\n")
     
     while True:
-        # Display the current time
-        print(f"\nCurrent Time: {datetime.now().strftime('%I:%M %p')}\n")
-
-        # Display options to the user
+        print("---------------------------------------------------------------------")
         print("Choose an option:")
         print("1. Force send messages to all contacts")
         print("2. Send messages to only appropriate contacts (check preferred time)")
-        print("3. Add a new contact")
-        print("4. View all contacts")
+        print("3. View all contacts")
+        print("4. Add a new contact")
         print("5. Update a contact")
         print("6. Delete a contact")
-        print("7. Print all entries from current and previous days from log.txt")
+        print("7. Print logs from current and previous days")
         print("8. Exit")
 
         choice = input("\nEnter your choice (1/2/3/4/5/6/7/8): ")
 
-        if choice == '1':
-            print("\nForcing send messages to all contacts...\n")
-            force_send_all(my_contacts)
+        try:
+            if choice == '1':
+                print("\nForcing send messages to all contacts...\n")
+                force_send_all(my_contacts)
 
-        elif choice == '2':
-            print("\nSending messages to appropriate contacts based on their preferred time...\n")
-            send_appropriate_messages(my_contacts)
+            elif choice == '2':
+                print("\nSending messages to appropriate contacts based on their preferred time...\n")
+                send_appropriate_messages(my_contacts)
 
-        elif choice == '3':
-            add_contact(my_contacts)
+            elif choice == '3':
+                view_contacts(my_contacts)
 
-        elif choice == '4':
-            view_contacts(my_contacts)
+            elif choice == '4':
+                add_contact(my_contacts)
 
-        elif choice == '5':
-            update_contact(my_contacts)
+            elif choice == '5':
+                update_contact(my_contacts)
 
-        elif choice == '6':
-            delete_contact(my_contacts)
+            elif choice == '6':
+                delete_contact(my_contacts)
 
-        elif choice == '7':
-            print("\nLog entries from today and yesterday:\n")
-            print_logs()
+            elif choice == '7':
+                print("\nLog entries from today and yesterday:\n")
+                print_logs()
 
-        elif choice == '8':
-            print("Exiting...")
-            break
+            elif choice == '8':
+                print("Exiting...")
+                break
 
-        else:
-            print("Invalid choice. Please enter a valid option.")
+            else:
+                print("Invalid choice. Please enter a valid option.")
+        except Exception as e:
+            print(f"An error occurred: {e}. Please try again.")
 
 
 if __name__ == "__main__":
