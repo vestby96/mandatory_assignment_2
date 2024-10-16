@@ -15,6 +15,6 @@ Challenges faced:
     - $ pip install --upgrade .
 
 # How to use
-After installing the package, run the following command to run the program:
-- $ morning_greetings
-Follow the commands presented to complete your desired tasks. 
+1. After installing the package, run the following command to run the program:
+    - $ morning_greetings
+2. Follow the commands presented to complete your desired tasks. 
