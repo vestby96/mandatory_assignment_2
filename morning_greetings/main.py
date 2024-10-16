@@ -112,12 +112,12 @@ def delete_contact(my_contacts: ContactList):
     """Delete a contact with error handling."""
     try:
         view_contacts(my_contacts)
-        name = input("\nEnter the name of the contact you want to delete: ").strip()
+        email = input("\nEnter the email of the contact you want to delete: ").strip()
 
-        if my_contacts.remove_contact(name):
-            print(f"Contact '{name}' deleted successfully.")
+        if my_contacts.remove_contact(email):
+            print(f"Contact '{email}' deleted successfully.")
         else:
-            print(f"No contact found with the name '{name}'.")
+            print(f"No contact found with the email '{email}'.")
     except ValueError as e:
         print(f"Error deleting contact: {e}. Please try again.")
 
