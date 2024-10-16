@@ -16,5 +16,5 @@ Challenges faced:
 
 # How to use
 After installing the package, run the following command to run the program:
-    - $ morning_greetings
+- $ morning_greetings
 Follow the commands presented to complete your desired tasks. 
