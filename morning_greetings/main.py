@@ -1,3 +1,5 @@
+# main.py
+
 from morning_greetings.contacts import ContactList, Contact
 from morning_greetings.logger import print_logs
 from morning_greetings.message_generator import message_generator
@@ -37,7 +39,6 @@ def message_already_sent_today(contact: Contact) -> bool:
     
     return False
 
-
 # CRUD Functions for Managing Contacts
 
 def add_contact(my_contacts: ContactList):
@@ -56,7 +57,6 @@ def add_contact(my_contacts: ContactList):
     except ValueError as e:
         print(f"Error adding contact: {e}. Please try again.")
 
-
 def view_contacts(my_contacts: ContactList):
     """Display all contacts."""
     contacts = my_contacts.get_contacts()
@@ -66,7 +66,6 @@ def view_contacts(my_contacts: ContactList):
         print("\nList of Contacts:")
         for idx, contact in enumerate(contacts, start=1):
             print(f"{idx}. Name: {contact.name}, Email: {contact.email}, Preferred Time: {contact.preferred_time}")
-
 
 def update_contact(my_contacts: ContactList):
     """Update an existing contact, using either the email or name to find the contact."""
@@ -109,7 +108,6 @@ def update_contact(my_contacts: ContactList):
     except ValueError as e:
         print(f"Error updating contact: {e}. Please try again.")
 
-
 def delete_contact(my_contacts: ContactList):
     """Delete a contact with error handling."""
     try:
@@ -123,6 +121,7 @@ def delete_contact(my_contacts: ContactList):
     except ValueError as e:
         print(f"Error deleting contact: {e}. Please try again.")
 
+# Send messages
 
 def force_send_all(my_contacts: ContactList):
     """Force send messages to all contacts regardless of preferred time."""
@@ -132,7 +131,6 @@ def force_send_all(my_contacts: ContactList):
             send_message(c, msg)
         else:
             print(f"Message already sent to {c.name} today. Skipping...")
-
 
 def send_appropriate_messages(my_contacts: ContactList):
     """Send messages only to contacts whose preferred time is within the 15-minute window."""

@@ -1,28 +1,31 @@
+# contacts.py
+
 import re
 from datetime import datetime
 
 class Contact:
     def __init__(self, name: str, email: str, preferred_time: str = "08:00 AM"):
+        """Initiates the Contact class with name, email, and preferred_time."""
         self.name = self.validate_name(name)
         self.email = self.validate_email(email)
         self.preferred_time = self.validate_time(preferred_time)
 
     def validate_name(self, name: str) -> str:
-        """Validates that the name is a non-empty string."""
+        """Validates that name is a non-empty string."""
         if not isinstance(name, str) or not name.strip():
             raise ValueError("Name must be a non-empty string.")
         return name.strip()
 
     def validate_email(self, email: str) -> str:
-        """Validates that the email follows the correct format."""
-        # Basic regex for validating email
+        """Validates that email follows the correct format."""
+        # Basic regex for validating email format
         email_regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
         if not re.match(email_regex, email):
             raise ValueError(f"Invalid email address: {email}")
         return email
 
     def validate_time(self, time_str: str) -> str:
-        """Validates the preferred time format as HH:MM AM/PM."""
+        """Validates that preferred_time format as HH:MM AM/PM."""
         try:
             # Use datetime to check if the time is in the correct format
             valid_time = datetime.strptime(time_str, "%I:%M %p")
@@ -36,9 +39,11 @@ class Contact:
 
 class ContactList:
     def __init__(self) -> None:
+        """Initiates the ContactList class."""
         self.contacts = []
     
     def add_contact(self, name: str, email: str, preferred_time: str = "08:00 AM") -> None:
+        """Creates and appends a new contact with name, email, and preferred_time."""
         if any(c.email == email for c in self.contacts):
             raise ValueError(f"Contact with email ({email}) already exists.")
         
@@ -55,7 +60,7 @@ class ContactList:
         return len(self.contacts) < initial_length
 
     def update_contact(self, email: str, name: str = None, preferred_time: str = None) -> bool:
-        """Update an existing contact's email or preferred time."""
+        """Update an existing contact's name or preferred time."""
         c = self.find_contact_by_email(email)
         if name:
             c.name = c.validate_email(name)
@@ -64,6 +69,7 @@ class ContactList:
         return True
 
     def get_contacts(self) -> list[Contact]:
+        """Returns list of all contacts."""
         return self.contacts
     
     def find_contact_by_email(self, email: str) -> Contact:
@@ -87,17 +93,5 @@ class ContactList:
         return contacts
 
     def __repr__(self) -> str:
+        """Represent the contact list with length and names for readability."""
         return f"ContactList({len(self.contacts)} contacts: {', '.join([c.name for c in self.contacts])})"
-    
-def test():
-    my_contacts = ContactList()
-    my_contacts.add_contact("Jens", "jens@python.org")
-    my_contacts.add_contact("Jens", "jensJensen@python.org")
-    my_contacts.add_contact("Nils", "nils@goolge.com", "10:30 AM")
-    my_contacts.add_contact("Knut", "knut@microsoft.com", "06:43 PM")
-    print(my_contacts)
-    my_contacts.remove_contact(name="Jens")
-    print(my_contacts)
-
-if __name__=="__main__":
-    test()

@@ -1,8 +1,10 @@
+# message_generator.py
+
 from datetime import datetime
 from morning_greetings.contacts import Contact
 
 def message_generator(c: Contact):
-    # Parse the preferred time string (e.g., "08:00 AM")
+    # Parse the preferred time string ("08:00 AM")
     time = datetime.strptime(c.preferred_time, "%I:%M %p")
     
     # Extract the hour to determine the time of day
